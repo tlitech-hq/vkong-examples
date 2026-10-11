@@ -77,6 +77,7 @@ frameworks without becoming one long mixed list.
 | Recipe | Framework | Workload | Compute |
 |---|---|---|---:|
 | [Fine-tune SmolLM2 with Unsloth](smollm2-unsloth-finetuning) | Unsloth | Full-epoch LoRA training with resumable checkpoints | 1× GPU |
+| [Train a decision model with Unsloth](qwen35-4b-unsloth-decision-model) | Unsloth | Qwen3.5-4B picks options with calibrated probabilities; 77.7% on the test split | 1× RTX 4090 |
 | [GPU training smoke test](pytorch-training-smoke-test) | PyTorch | Verify training, checkpoints, and task lifecycle with a small CNN | 1× GPU |
 
 ### Image generation
