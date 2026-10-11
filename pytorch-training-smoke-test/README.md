@@ -16,18 +16,25 @@ project directory while the machine is active.
 
 ## Keep the output
 
-For durable output, add `storage: pytorch-training-smoke-test-data` to `vkong.yaml` and
-change the output path in the Python script to `/data/mnist_cnn.pt` before running.
-Allow enough `disk_gb` for the runtime and restored data. After a successful run,
-stop the App to save the volume, then download the saved file:
+For durable output, add a volume to `vkong.yaml`:
+
+```yaml
+storage:
+  volume: pytorch-training-smoke-test-data
+```
+
+Change the output path in the Python script to
+`/vkong/storage/pytorch-training-smoke-test-data/mnist_cnn.pt` before running, and allow
+enough `disk_gb` for the runtime and the whole volume. Files written there save
+automatically. After a successful run, stop the App, then download the saved file:
 
 ```bash
 vkong app stop pytorch-training-smoke-test
 vkong storage download pytorch-training-smoke-test-data mnist_cnn.pt -o mnist_cnn.pt
 ```
 
-Storage only saves files under `/data`. The default project-directory output
-is temporary and is removed when the machine is destroyed.
+Storage saves only files under the volume mount. The default project-directory
+output is temporary and is removed when the machine is destroyed.
 
 ## Stop
 

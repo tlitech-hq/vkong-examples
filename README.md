@@ -25,7 +25,7 @@ Install the [`vkong` CLI](https://vkong.tli-tech.com/download), then run the
 smallest example:
 
 ```bash
-git clone https://github.com/tlitech/vkong-examples.git
+git clone https://github.com/tlitech-hq/vkong-examples.git
 cd vkong-examples/hello-world
 
 vkong login
@@ -173,7 +173,7 @@ run short. Put optional deployment and tuning instructions afterwards.
 - Let the framework download its model; set its cache location instead of writing a downloader.
 - Use `requirements.txt` for dependency lists and a small Python file for model conversion or preparation.
 - Keep necessary server options in a readable `serve.sh`; avoid shell installation fallbacks.
-- Explain whether output/cache is temporary or saved under `/data`.
+- Explain whether output/cache is temporary or saved in the Storage volume (`/vkong/storage/<volume>`).
 - Keep credentials in workspace secrets, and retain the example's price and resource limits.
 
 See the [Hugging Face cache settings](https://huggingface.co/docs/huggingface_hub/package_reference/environment_variables)

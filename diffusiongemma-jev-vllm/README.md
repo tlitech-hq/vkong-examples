@@ -80,7 +80,7 @@ vkong app stop diffusiongemma-jev-vllm
 The framework downloads the model to the rental's local disk. That cache is
 removed when the machine is released, and a new machine downloads it again.
 Do not add `storage` to this service: workspace volumes are for training tasks
-that write checkpoints to `/data`.
+that write checkpoints to `/vkong/storage/<volume>`.
 
 ## What the client sends
 
