@@ -3,7 +3,7 @@ type: task
 app: smollm2-unsloth-finetuning
 
 # Compute
-gpu: RTX 3060
+gpu: RTX 4090
 num_gpus: 1
 cpu_cores: 4
 ram_gb: 16
