@@ -30,7 +30,8 @@ last complete saved checkpoint, not from unsaved GPU memory.
 
 ## Checkpoints and final adapter
 
-All outputs live in `/data/smollm2-unsloth-full` on volume `unsloth-smollm2-lab`:
+All outputs live in `/vkong/storage/unsloth-smollm2-lab/smollm2-unsloth-full`,
+the default mount path of volume `unsloth-smollm2-lab`:
 
 - `checkpoints/checkpoint-<step>/`: LoRA weights, tokenizer, optimizer, scheduler,
   RNG and Trainer state. Saves every 500 optimizer steps and at the final step;
@@ -73,11 +74,12 @@ frequency. The default uses the whole training split; sequences are limited to
 
 Keep the same model, data and training settings when resuming. For a new experiment,
 choose a fresh `OUTPUT` directory, and update the download path accordingly. The new
-directory is separate from the old `/data/smollm2-unsloth-60-step` test output.
+directory is separate from the old `smollm2-unsloth-60-step` test output in the volume.
 
-Hugging Face downloads the model and dataset into its cache. VKong preserves that
-cache under `/data` through `cache: [huggingface]`. The recipe requests 82 GB disk;
-VKong checks available storage headroom before renting.
+Hugging Face downloads the model and dataset into its normal cache on the rental's
+disk. Only the volume is saved; VKong writes back changes under the mount path
+automatically. The recipe requests 82 GB disk; VKong checks available storage
+headroom before renting.
 
 This full-dataset task has been checked locally; its new training duration,
 GPU memory use and end-to-end resume still require a GPU run. The old 60-step

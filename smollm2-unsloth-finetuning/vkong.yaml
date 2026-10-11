@@ -15,8 +15,8 @@ max_dph: 0.60
 verified_only: true
 
 # Storage
-storage: unsloth-smollm2-lab
-cache: [huggingface]
+storage:
+  volume: unsloth-smollm2-lab  # mounted at /vkong/storage/unsloth-smollm2-lab
 
 # Runtime
 image: unsloth/unsloth:core-nightly-2026.09.18
