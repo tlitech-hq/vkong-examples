@@ -1,0 +1,28 @@
+# App
+type: task
+app: qwen35-4b-unsloth-decision-model
+
+# Compute
+gpu: RTX 4090
+num_gpus: 1
+cpu_cores: 8
+ram_gb: 32
+disk_gb: 80
+inet_down_mbps: 1000  # the image is 7.8 GB; a fast link shortens the first pull
+
+# Budget
+max_dph: 0.60
+verified_only: true
+
+# Storage
+storage:
+  volume: unsloth-decision-lab  # mounted at /vkong/storage/unsloth-decision-lab
+
+# Runtime
+image: unsloth/unsloth:core-nightly-2026.10.10
+# Dashboard → Secrets: a bundle named huggingface with HF_TOKEN. Authenticated
+# downloads are faster and not rate limited.
+secrets: [huggingface]
+start_argv:
+  - python3
+  - train.py
