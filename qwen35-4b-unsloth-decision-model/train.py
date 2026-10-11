@@ -177,9 +177,11 @@ trainer = DecisionTrainer(
     ),
 )
 result = trainer.train(resume_from_checkpoint=resume_from)
-if int(result.global_step) != trainer.state.max_steps:
+# Resuming from the final checkpoint can run one extra step; use the actual last step.
+final_step = int(trainer.state.global_step)
+if final_step < trainer.state.max_steps:
     raise RuntimeError("training ended before all configured epochs completed")
-verify_checkpoint(CHECKPOINTS / f"checkpoint-{int(result.global_step)}")
+verify_checkpoint(CHECKPOINTS / f"checkpoint-{final_step}")
 
 # Calibration fits the probabilities, so a 90% answer is right about 90% of the time.
 metrics["holdout_calibrated"] = FastDecisionModel.calibrate(model, tokenizer, eval_items)
@@ -202,7 +204,7 @@ for name, result_ in answers.items():
 model.save_pretrained(str(FINAL_ADAPTER))
 tokenizer.save_pretrained(str(FINAL_ADAPTER))
 metrics["training"] = {
-    "steps": int(result.global_step),
+    "steps": final_step,
     "train_loss": float(result.training_loss),
     "train_runtime_seconds": float(result.metrics.get("train_runtime", 0.0)),
     "train_rows": len(train_items),
@@ -212,6 +214,6 @@ metrics["training"] = {
 }
 write_json(METRICS, metrics)
 # The marker is written last: its presence means everything above is saved.
-write_json(MARKER, {**SETTINGS, "steps": int(result.global_step), "adapter": str(FINAL_ADAPTER)})
+write_json(MARKER, {**SETTINGS, "steps": final_step, "adapter": str(FINAL_ADAPTER)})
 print(f"training complete: adapter={FINAL_ADAPTER}", flush=True)
 prepare_download()
