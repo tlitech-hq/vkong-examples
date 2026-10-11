@@ -151,8 +151,10 @@ if resume_from:
     verify_checkpoint(Path(resume_from), require_scaler=require_scaler)
     print(f"resuming training from {resume_from}", flush=True)
 result = trainer.train(resume_from_checkpoint=resume_from)
-final_checkpoint = CHECKPOINTS / f"checkpoint-{int(result.global_step)}"
-if int(result.global_step) != trainer.state.max_steps:
+# Resuming from the final checkpoint can run one extra step; use the actual last step.
+final_step = int(trainer.state.global_step)
+final_checkpoint = CHECKPOINTS / f"checkpoint-{final_step}"
+if final_step < trainer.state.max_steps:
     raise RuntimeError("training ended before all configured epochs completed")
 verify_checkpoint(final_checkpoint, require_scaler=require_scaler)
 model.save_pretrained(FINAL_ADAPTER)
@@ -167,7 +169,7 @@ temporary_marker.write_text(
             "epochs": NUM_TRAIN_EPOCHS,
             "max_sequence_length": MAX_SEQUENCE_LENGTH,
             "examples": len(dataset),
-            "steps": int(result.global_step),
+            "steps": final_step,
             "checkpoint": str(final_checkpoint),
             "train_loss": float(result.training_loss),
             "amp_scaler": require_scaler,
