@@ -3,7 +3,7 @@ type: task
 app: qwen35-08b-unsloth-wikipedia-cpt
 
 # Compute
-gpu: RTX 4090
+gpu: RTX-4090
 num_gpus: 1
 cpu_cores: 8
 ram_gb: 32
