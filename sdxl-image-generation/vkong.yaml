@@ -3,7 +3,7 @@ type: task
 app: sdxl-image-generation
 
 # Compute
-gpu: RTX 4090
+gpu: RTX-4090
 num_gpus: 1
 cpu_cores: 4
 ram_gb: 16

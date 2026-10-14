@@ -4,7 +4,7 @@ app: qwen35-9b-llama-cpp
 app_port: 8080
 
 # Compute
-gpu: RTX 4090
+gpu: RTX-4090
 num_gpus: 1
 cpu_cores: 8
 ram_gb: 16
