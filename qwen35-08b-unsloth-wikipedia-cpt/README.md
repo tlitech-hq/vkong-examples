@@ -71,7 +71,7 @@ Check that the volume's last save completed, then download the adapter without a
 GPU:
 
 ```bash
-vkong storage show unsloth-wiki-lab
+vkong storage list
 vkong storage download unsloth-wiki-lab runs/qwen35-08b-wikipedia-cpt/final-adapter -o ./final-adapter
 ```
 

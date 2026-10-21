@@ -6,13 +6,10 @@ app_port: 8000
 # Compute
 gpu: Any
 num_gpus: 0
-cpu_cores: 2
-ram_gb: 4
 disk_gb: 16
-inet_down_mbps: 0
 
 # Budget
-max_dph: 0.5
+max_price: 0.5
 verified_only: true
 
 # Runtime

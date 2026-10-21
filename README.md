@@ -91,7 +91,7 @@ frameworks without becoming one long mixed list.
 Start with **Hello World** to verify login, provisioning, sync, and connectivity.
 Use **llama.cpp** or **SGLang** for a practical single-GPU inference service.
 The **vLLM** recipe requests four H100 GPUs and can be expensive; review its
-`max_dph` and the displayed hourly price before starting it.
+`max_price` and the displayed hourly price before starting it.
 
 ## How a recipe works
 
@@ -108,8 +108,10 @@ The important fields are:
 
 - `type: task|service` — whether the workload exits or keeps listening.
 - `app` — the stable App name shown in the dashboard.
-- `gpu`, `num_gpus`, `cpu_cores`, `ram_gb`, `disk_gb` — compute requirements.
-- `max_dph` — the maximum hourly machine price you accept.
+- `gpu`, `num_gpus`, `disk_gb` — the GPU and disk the workload needs.
+- `min_cpu_cores`, `min_ram_gb`, `min_download_mbps` — optional minimums. Each one
+  leaves out machines, so set them only when the program needs them.
+- `max_price` — the maximum hourly machine price you accept.
 - `image` — the container image for the workload.
 - `init_cmd` and `start` — setup and execution commands.
 

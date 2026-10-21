@@ -5,14 +5,13 @@ app: pytorch-training-smoke-test
 # Compute
 gpu: Any
 num_gpus: 1
-cpu_cores: 4
-ram_gb: 8
+min_cpu_cores: 4
+min_ram_gb: 8
 disk_gb: 16
-inet_down_mbps: 100
 
 # Budget
-# vkong dev quotes about $1.56/hour; for vkong run only, max_dph: 1.0 is enough.
-max_dph: 2.0
+# vkong dev quotes about $1.56/hour; for vkong run only, max_price: 1.0 is enough.
+max_price: 2.0
 verified_only: true
 
 # Runtime

@@ -5,13 +5,12 @@ app: qwen35-08b-unsloth-wikipedia-cpt
 # Compute
 gpu: RTX-4090
 num_gpus: 1
-cpu_cores: 8
-ram_gb: 32
+min_cpu_cores: 8
+min_ram_gb: 32
 disk_gb: 120           # 11.6 GB dataset, model, caches, checkpoints and the image
-inet_down_mbps: 1000
 
 # Budget
-max_dph: 0.60
+max_price: 0.60
 verified_only: true
 
 # Storage: the dataset and the checkpoints live in this one volume.
