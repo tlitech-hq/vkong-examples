@@ -43,4 +43,4 @@ that write checkpoints to `/vkong/storage/<volume>`.
 ## Customize
 
 Edit `vkong.yaml` for compute requirements and the hourly price limit.
-This example requests four GPUs and up to $16/hour for the machine. Review `max_dph` before starting. The 500 GB disk accommodates the large model and runtime. Multi-GPU availability and compatibility still need a live run; do not treat this recipe as a completed provider proof.
+This example requests four GPUs and up to $16/hour for the machine. Review `max_price` before starting. The 500 GB disk accommodates the large model and runtime. Multi-GPU availability and compatibility still need a live run; do not treat this recipe as a completed provider proof.

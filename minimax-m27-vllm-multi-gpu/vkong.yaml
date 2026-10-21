@@ -6,13 +6,12 @@ app_port: 8000
 # Compute
 gpu: H100
 num_gpus: 4
-cpu_cores: 32
-ram_gb: 128
+min_cpu_cores: 32
+min_ram_gb: 128
 disk_gb: 500
-inet_down_mbps: 1000
 
 # Budget
-max_dph: 16
+max_price: 16
 verified_only: false
 
 # Runtime

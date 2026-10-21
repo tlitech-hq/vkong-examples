@@ -6,13 +6,12 @@ app_port: 8000
 # Compute
 gpu: RTX-4090
 num_gpus: 1
-cpu_cores: 4
-ram_gb: 16
+min_cpu_cores: 4
+min_ram_gb: 16
 disk_gb: 40
-inet_down_mbps: 500
 
 # Budget
-max_dph: 2.5
+max_price: 2.5
 verified_only: true
 
 # Runtime

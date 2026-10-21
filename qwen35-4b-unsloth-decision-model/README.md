@@ -71,7 +71,7 @@ Check that the volume's last save completed, then download the archive without a
 GPU:
 
 ```bash
-vkong storage show unsloth-decision-lab
+vkong storage list
 vkong storage download unsloth-decision-lab qwen35-4b-decisions/download/qwen35-4b-decisions.tar.gz
 ```
 

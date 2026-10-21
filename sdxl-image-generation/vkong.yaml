@@ -5,14 +5,13 @@ app: sdxl-image-generation
 # Compute
 gpu: RTX-4090
 num_gpus: 1
-cpu_cores: 4
-ram_gb: 16
+min_cpu_cores: 4
+min_ram_gb: 16
 disk_gb: 32
-inet_down_mbps: 300
 
 # Budget
-# vkong dev quotes about $1.76/hour; for vkong run only, max_dph: 1.5 is enough.
-max_dph: 2.0
+# vkong dev quotes about $1.76/hour; for vkong run only, max_price: 1.5 is enough.
+max_price: 2.0
 verified_only: true
 
 # Runtime

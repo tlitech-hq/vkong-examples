@@ -6,14 +6,13 @@ app_port: 30000
 # Compute
 gpu: RTX-4090
 num_gpus: 1
-cpu_cores: 8
-ram_gb: 32
+min_cpu_cores: 8
+min_ram_gb: 32
 disk_gb: 80
-inet_down_mbps: 500
 
 # Budget
-# vkong dev quotes about $2.71/hour; for vkong run only, max_dph: 2.5 is enough.
-max_dph: 3.0
+# vkong dev quotes about $2.71/hour; for vkong run only, max_price: 2.5 is enough.
+max_price: 3.0
 verified_only: true
 
 # Runtime

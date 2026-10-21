@@ -53,7 +53,7 @@ its files, rebuilds the archive and exits without training again.
 First check that the volume's latest save has completed successfully:
 
 ```bash
-vkong storage show unsloth-smollm2-lab
+vkong storage list
 ```
 
 Then download the archive without keeping a GPU online:
