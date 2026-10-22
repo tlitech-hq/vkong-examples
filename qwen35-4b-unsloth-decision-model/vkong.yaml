@@ -22,6 +22,4 @@ image: unsloth/unsloth:core-nightly-2026.10.10
 # Dashboard → Secrets: a bundle named huggingface with HF_TOKEN. Authenticated
 # downloads are faster and not rate limited.
 secrets: [huggingface]
-start_argv:
-  - python3
-  - train.py
+start: python3 train.py

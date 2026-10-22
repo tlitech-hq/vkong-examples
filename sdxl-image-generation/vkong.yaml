@@ -17,6 +17,4 @@ verified_only: true
 # Runtime
 image: pytorch/pytorch:2.7.1-cuda12.8-cudnn9-runtime
 init_cmd: python3 -m pip install -r requirements.txt
-start_argv:
-  - python3
-  - generate.py
+start: python3 generate.py

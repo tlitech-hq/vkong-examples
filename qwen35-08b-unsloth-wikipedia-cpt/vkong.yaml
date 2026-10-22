@@ -20,6 +20,4 @@ storage:
 # Runtime
 image: unsloth/unsloth:core-nightly-2026.10.10
 secrets: [huggingface]      # HF_TOKEN for fast, authenticated downloads
-start_argv:
-  - python3
-  - train.py
+start: python3 train.py
