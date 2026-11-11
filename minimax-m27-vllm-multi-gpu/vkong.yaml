@@ -2,6 +2,8 @@
 type: service
 app: minimax-m27-vllm-multi-gpu
 app_port: 8000
+# Downloading and loading the model across four GPUs takes well over 20 minutes.
+startup_timeout: 1h30m
 
 # Compute
 gpu: H100

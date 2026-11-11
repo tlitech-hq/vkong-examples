@@ -1,0 +1,5 @@
+# VKong leaves out every models/ folder by default. This recipe keeps Triton's
+# model configuration there, so send models/ to the machine. The ONNX weights
+# stay out (prepare_model.py downloads them on the machine).
+!models/
+*.onnx
