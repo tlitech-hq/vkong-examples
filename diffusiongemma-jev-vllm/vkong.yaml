@@ -2,6 +2,8 @@
 type: service
 app: diffusiongemma-jev-vllm
 app_port: 8011
+# The first start downloads about 50 GB of weights before vLLM answers.
+startup_timeout: 45m
 
 # Compute
 gpu: H100
