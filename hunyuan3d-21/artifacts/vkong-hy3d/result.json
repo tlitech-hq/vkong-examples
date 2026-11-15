@@ -1,0 +1,31 @@
+{
+  "gpu": "RTX 4090 24 GB",
+  "seed": 1234,
+  "steps": 30,
+  "guidance_scale": 5.0,
+  "octree_resolution": 256,
+  "num_chunks": 8000,
+  "texture_views": 6,
+  "texture_resolution": 512,
+  "shape_inference_seconds": 14.14,
+  "shape_peak_allocated_vram_gib": 7.63,
+  "shape_seconds_including_cached_model_load": 42.656519651412964,
+  "texture_inference_seconds": 36.59,
+  "texture_peak_allocated_vram_gib": 13.52,
+  "texture_seconds_including_cached_model_load": 62.529000759124756,
+  "glb_export_seconds": 1.0577802658081055,
+  "faces": 40000,
+  "vertices": 24291,
+  "materials": [
+    {
+      "type": "PBRMaterial",
+      "base_color_texture_size": [
+        2048,
+        2048
+      ]
+    }
+  ],
+  "glb_bytes": 4884584,
+  "sha256": "a2006718882db422713c2f5b08f200489ad987ec8b242150076699a44108e7a5",
+  "ui_walkthrough": "Repeated through Gradio with the same input and parameters; UI-exported GLB saved separately."
+}

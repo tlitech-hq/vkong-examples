@@ -1,0 +1,17 @@
+{
+  "input": "input.png",
+  "seed": 1234,
+  "steps": 30,
+  "octree_resolution": 256,
+  "generation_seconds_including_model_load": 98.74457441596314,
+  "screenshots": [
+    "01-open-ui.png",
+    "02-upload-vkong.png",
+    "03-generation-settings.png",
+    "04-generating.png",
+    "05-generated-mascot.png",
+    "06-export-glb.png",
+    "07-mesh-statistics.png"
+  ],
+  "result_iframe": "/static/3f1d3cfe-3c60-4d31-b825-3735b6fc87ec/textured_mesh.html"
+}

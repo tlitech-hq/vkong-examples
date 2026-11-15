@@ -1,0 +1,20 @@
+# App
+type: service
+app: trellis2-image-to-3d
+app_port: 7860
+
+# Compute
+gpu: A100
+num_gpus: 1
+min_ram_gb: 64
+disk_gb: 150
+
+# Budget
+max_price: 2.00
+verified_only: false
+
+# Runtime
+secrets: [huggingface]
+image: pytorch/pytorch:2.6.0-cuda12.4-cudnn9-devel
+init_cmd: bash setup.sh # includes model prefetch before service readiness
+start: bash serve.sh
