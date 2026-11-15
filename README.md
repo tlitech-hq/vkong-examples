@@ -88,16 +88,6 @@ frameworks without becoming one long mixed list.
 | [SDXL image generation](sdxl-image-generation) | Diffusers | SSD-1B text-to-image task | 1× RTX 4090 |
 | [Qwen-Image 2.1 with Viggle Turbo](qwen-image-21-viggle-turbo-sglang) | SGLang Diffusion | 6-step text-to-image and image-editing API | 1× RTX 4090 |
 
-### 3D generation
-
-Hunyuan shape and texture generation are verified on RTX 4090, with a saved GLB,
-six rendered views, and a Gradio walkthrough. TRELLIS.2 remains a draft pending inference validation.
-
-| Recipe | Model | Compute | Interface |
-|---|---|---|---|
-| [TRELLIS.2 image-to-3D](trellis2-image-to-3d) | TRELLIS.2-4B | 1× A100 40 GB | Image upload, PBR asset preview, GLB download |
-| [Hunyuan3D 2.1](hunyuan3d-21) | Hunyuan3D-2.1 shape + paint | 1× RTX 4090 | Image upload, textured mesh, GLB export |
-
 Start with **Hello World** to verify login, provisioning, sync, and connectivity.
 Use **llama.cpp** or **SGLang** for a practical single-GPU inference service.
 The **vLLM** recipe requests four H100 GPUs and can be expensive; review its
