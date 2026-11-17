@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://vkong.tli-tech.com">
-    <img src="https://vkong.tli-tech.com/logo-text.png" alt="VKong" height="72">
+    <img src="images/vkong-logo.png" alt="VKong" height="72">
   </a>
 </p>
 
