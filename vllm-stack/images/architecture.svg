@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="440" viewBox="0 0 960 440" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title>vllm-stack: requests go through the VKong URL to two vLLM machines; each machine pushes its metrics to Grafana Cloud</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+    <marker id="arrow-metrics" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#c2410c"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="440" rx="12" fill="#ffffff"/>
+
+  <!-- Client -->
+  <rect x="20" y="170" width="150" height="84" rx="10" fill="#f1f5f9" stroke="#94a3b8"/>
+  <text x="95" y="204" text-anchor="middle" font-size="15" font-weight="600" fill="#0f172a">Your app</text>
+  <text x="95" y="226" text-anchor="middle" font-size="13" fill="#475569">or a benchmark</text>
+
+  <!-- Client to gateway -->
+  <line x1="170" y1="212" x2="282" y2="212" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="226" y="198" text-anchor="middle" font-size="12" fill="#334155">HTTPS</text>
+  <text x="226" y="234" text-anchor="middle" font-size="11" fill="#334155">X-Vkong-Session</text>
+  <text x="226" y="249" text-anchor="middle" font-size="11" fill="#64748b">(optional)</text>
+
+  <!-- Gateway -->
+  <rect x="284" y="150" width="200" height="124" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+  <text x="384" y="182" text-anchor="middle" font-size="15" font-weight="600" fill="#065f46">VKong URL</text>
+  <text x="384" y="202" text-anchor="middle" font-size="12" fill="#047857">picks a machine</text>
+  <text x="384" y="230" text-anchor="middle" font-size="12" fill="#334155">no header: spread out</text>
+  <text x="384" y="250" text-anchor="middle" font-size="12" fill="#334155">same session: same machine</text>
+
+  <!-- Gateway to machines -->
+  <path d="M484,190 C520,190 520,100 556,100" fill="none" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M484,234 C520,234 520,324 556,324" fill="none" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Machine 1 -->
+  <rect x="558" y="28" width="200" height="150" rx="10" fill="#f8fafc" stroke="#64748b"/>
+  <text x="574" y="52" font-size="14" font-weight="600" fill="#0f172a">Machine 1</text>
+  <text x="742" y="52" text-anchor="end" font-size="12" fill="#64748b">RTX 4090</text>
+  <rect x="574" y="64" width="168" height="48" rx="8" fill="#eff6ff" stroke="#3b82f6"/>
+  <text x="658" y="85" text-anchor="middle" font-size="13" font-weight="600" fill="#1e3a8a">vLLM :8000</text>
+  <text x="658" y="102" text-anchor="middle" font-size="11" fill="#1d4ed8">prefix cache</text>
+  <rect x="574" y="122" width="168" height="40" rx="8" fill="#fff7ed" stroke="#f97316"/>
+  <text x="658" y="147" text-anchor="middle" font-size="13" fill="#9a3412">metrics_agent.py</text>
+
+  <!-- Machine 2 -->
+  <rect x="558" y="252" width="200" height="150" rx="10" fill="#f8fafc" stroke="#64748b"/>
+  <text x="574" y="276" font-size="14" font-weight="600" fill="#0f172a">Machine 2</text>
+  <text x="742" y="276" text-anchor="end" font-size="12" fill="#64748b">RTX 4090</text>
+  <rect x="574" y="288" width="168" height="48" rx="8" fill="#eff6ff" stroke="#3b82f6"/>
+  <text x="658" y="309" text-anchor="middle" font-size="13" font-weight="600" fill="#1e3a8a">vLLM :8000</text>
+  <text x="658" y="326" text-anchor="middle" font-size="11" fill="#1d4ed8">prefix cache</text>
+  <rect x="574" y="346" width="168" height="40" rx="8" fill="#fff7ed" stroke="#f97316"/>
+  <text x="658" y="371" text-anchor="middle" font-size="13" fill="#9a3412">metrics_agent.py</text>
+
+  <!-- Agents read local /metrics -->
+  <line x1="600" y1="122" x2="600" y2="114" stroke="#f97316" stroke-width="1.5"/>
+  <line x1="600" y1="346" x2="600" y2="338" stroke="#f97316" stroke-width="1.5"/>
+
+  <!-- Metrics push -->
+  <path d="M742,142 C800,142 800,200 832,206" fill="none" stroke="#c2410c" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow-metrics)"/>
+  <path d="M742,366 C800,366 800,248 832,236" fill="none" stroke="#c2410c" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow-metrics)"/>
+  <text x="889" y="140" text-anchor="middle" font-size="11" fill="#c2410c">remote write</text>
+  <text x="889" y="155" text-anchor="middle" font-size="11" fill="#c2410c">every 15 s</text>
+
+  <!-- Grafana -->
+  <rect x="834" y="168" width="110" height="96" rx="10" fill="#fff7ed" stroke="#ea580c" stroke-width="1.5"/>
+  <text x="889" y="204" text-anchor="middle" font-size="14" font-weight="600" fill="#7c2d12">Grafana</text>
+  <text x="889" y="222" text-anchor="middle" font-size="14" font-weight="600" fill="#7c2d12">Cloud</text>
+  <text x="889" y="246" text-anchor="middle" font-size="11" fill="#9a3412">dashboards</text>
+
+  <!-- Legend -->
+  <line x1="24" y1="414" x2="56" y2="414" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="64" y="418" font-size="12" fill="#334155">requests</text>
+  <line x1="140" y1="414" x2="172" y2="414" stroke="#c2410c" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow-metrics)"/>
+  <text x="180" y="418" font-size="12" fill="#334155">metrics (each agent reads its own vLLM's /metrics and pushes it)</text>
+</svg>

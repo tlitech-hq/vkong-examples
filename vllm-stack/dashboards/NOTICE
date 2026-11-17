@@ -1,0 +1,10 @@
+vllm.json is the reference Grafana dashboard from the vLLM project
+(examples/observability/prometheus_grafana/grafana.json), changed for this
+recipe: every query is filtered by app and a Machine (replica) variable, and
+latency, throughput, scheduler and cache panels draw one line per machine.
+
+Copyright contributors to the vLLM project.
+Licensed under the Apache License, Version 2.0:
+https://github.com/vllm-project/vllm/blob/main/LICENSE
+
+vllm-stack.json is part of this recipe.
