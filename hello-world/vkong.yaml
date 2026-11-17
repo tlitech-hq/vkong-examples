@@ -5,7 +5,7 @@ app_port: 8000
 
 # Compute
 gpu: Any
-num_gpus: 0
+num_gpus: 1
 disk_gb: 16
 
 # Budget

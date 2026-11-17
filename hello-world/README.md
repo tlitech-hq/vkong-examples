@@ -1,6 +1,6 @@
 # Hello World with FastAPI
 
-Run a small HTTP service on a CPU machine. The Python image already includes the runtime; setup installs only the app dependencies.
+Run a small HTTP service on the cheapest available GPU machine (`gpu: Any`); the app itself does not use the GPU. The Python image already includes the runtime; setup installs only the app dependencies.
 
 ## Run
 
