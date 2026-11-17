@@ -87,7 +87,7 @@ The first start downloads the model and takes a few minutes. When both
 machines serve, the App page in the [VKong dashboard](https://vkong.tli-tech.com/app)
 shows **Instances 2/2**:
 
-![The vllm-stack App in the VKong dashboard: healthy, 2/2 instances, one RTX 4090 per machine](images/vkong-app-running.png)
+![Instances in the VKong dashboard: Ready 2/2, two machines Running, one in Vietnam and one in the United States](images/vkong-app-instances.png)
 
 ### 4. Dashboards
 
