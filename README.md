@@ -55,7 +55,7 @@ frameworks without becoming one long mixed list.
 
 | Recipe | Framework | Compute | What you will run |
 |---|---|---:|---|
-| [Hello World](hello-world) | FastAPI | CPU | Minimal service and the shortest end-to-end VKong workflow |
+| [Hello World](hello-world) | FastAPI | 1× any GPU | Minimal service and the shortest end-to-end VKong workflow |
 
 ### LLM inference
 
