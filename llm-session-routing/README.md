@@ -1,19 +1,33 @@
-# vLLM stack: session routing and Grafana on two machines
+# LLM session routing: two machines, one header, Grafana
 
-Run vLLM on two RTX 4090 machines behind one VKong URL, keep each chat on the
-same machine, and watch the cache per machine in Grafana Cloud.
+Run an LLM engine on two RTX 4090 machines behind one VKong URL, keep each chat
+on the same machine, and watch the cache per machine in Grafana Cloud.
 
-**Result:** with one header, the prefix cache hit rate went from **25% to 61%**
-and follow-up messages got their first token **twice as fast** (0.73 s instead
-of 1.47 s).
+Session routing does not depend on the engine. Each engine has its own folder
+with the same setup:
+
+| Folder | Engine | Prefix cache |
+|---|---|---|
+| [`vllm/`](vllm) | vLLM | Automatic prefix caching |
+| [`sglang/`](sglang) | SGLang | RadixAttention |
+
+Both folders serve the same model (Qwen3-4B-Instruct-2507) on the same
+machines with about the same KV cache size, and use the same benchmark.
+
+**Result with vLLM:** with one header, the prefix cache hit rate went from
+**25% to 61%** and follow-up messages got their first token **twice as fast**
+(0.73 s instead of 1.47 s).
+
+**Result with SGLang:** the hit rate went from **18% to 49%** and follow-up
+messages got their first token in **0.89 s instead of 1.42 s**.
 
 ![Requests go through the VKong URL to two vLLM machines; each machine pushes its metrics to Grafana Cloud](images/architecture.svg)
 
 ## Why route by session
 
-In a chat, every new message resends the whole conversation. vLLM keeps the
-part it already computed in its **prefix cache** and skips it, but only on the
-machine that computed it. If the next message lands on another machine, that
+In a chat, every new message resends the whole conversation. The engine keeps
+the part it already computed in its **prefix cache** and skips it, but only on
+the machine that computed it. If the next message lands on another machine, that
 machine computes the whole conversation again.
 
 Add the header `X-Vkong-Session: <conversation id>` and VKong sends every
@@ -38,14 +52,16 @@ There is nothing to set in `vkong.yaml` and no router to run.
 
 | Path | What it is |
 |---|---|
-| `vkong.yaml` | The App: two machines with one RTX 4090 each |
-| `serve.sh` | Starts the metrics agent, then vLLM with prefix caching and an API key |
-| `metrics_agent.py` | Sends vLLM's metrics to Grafana Cloud every 15 s, labelled by machine |
-| `dashboards/` | Two Grafana dashboards, split per machine |
-| `bench/` | The multi-round chat benchmark of vLLM production-stack |
+| `bench/` | The multi-round chat benchmark of vLLM production-stack, run from your laptop |
+| `<engine>/vkong.yaml` | The App: two machines with one RTX 4090 each |
+| `<engine>/serve.sh` | Starts the metrics agent, then the engine with prefix caching and an API key |
+| `<engine>/metrics_agent.py` | Sends the engine's metrics to Grafana Cloud every 15 s, labelled by machine |
+| `<engine>/dashboards/` | Grafana dashboards, split per machine |
 
-Metrics are sent from each machine because the public URL reaches the App, not
-one machine, so Grafana could not read each machine from outside.
+Each engine folder is one VKong project: `vkong deploy` runs from it and sends
+only that folder to the machines. Metrics are sent from each machine because
+the public URL reaches the App, not one machine, so Grafana could not read each
+machine from outside.
 
 ## Run it
 
@@ -72,16 +88,24 @@ In the VKong dashboard, open **Secrets → New secret** and create `grafana`:
 Create the API key your clients will use:
 
 ```bash
-export VLLM_API_KEY=$(python3 -c "import secrets; print(secrets.token_urlsafe(32))")
-vkong secret create vllm-stack VLLM_API_KEY
+export LLM_API_KEY=$(python3 -c "import secrets; print(secrets.token_urlsafe(32))")
+vkong secret create llm-session-routing LLM_API_KEY
 ```
+
+Every engine folder reads the same two secrets.
 
 ### 3. Deploy
 
+Pick one engine folder:
+
 ```bash
-cd vllm-stack
+cd llm-session-routing/vllm      # App session-routing-vllm
+# or
+cd llm-session-routing/sglang    # App session-routing-sglang
 vkong deploy
 ```
+
+The two Apps have different names, so you can run both at the same time.
 
 The first start downloads the model and takes a few minutes. When both
 machines serve, the App page in the [VKong dashboard](https://vkong.tli-tech.com/app)
@@ -91,11 +115,16 @@ shows **Instances 2/2**:
 
 ### 4. Dashboards
 
-In Grafana, open **Dashboards → New → Import** and upload the two files in
-`dashboards/`:
+In Grafana, open **Dashboards → New → Import** and upload the files in your
+engine folder's `dashboards/`:
 
-- **vLLM stack on VKong**: cache hit rate and requests per machine.
-- **vLLM (per machine)**: vLLM's own dashboard, one line per machine.
+- `vllm/dashboards/`:
+  - **Session routing on VKong (vLLM)**: cache hit rate and requests per machine.
+  - **vLLM (per machine)**: vLLM's own dashboard, one line per machine.
+- `sglang/dashboards/`:
+  - **Session routing on VKong (SGLang)**: the same panels, from SGLang's
+    metrics. The hit rate is cached prompt tokens divided by all prompt
+    tokens, which is what vLLM's hit rate measures too.
 
 ### 5. Benchmark
 
@@ -107,13 +136,13 @@ history send message after message. This copy sends `X-Vkong-Session` when
 
 ```bash
 export VKONG_URL=https://<your App URL>
-cd bench
+cd llm-session-routing/bench
 bench() {
   uv run --with openai --with pandas --with tqdm python multi_round_qa.py \
     --num-users 15 --num-rounds 10 --qps 0.5 \
     --shared-system-prompt 1000 --user-history-prompt 10000 --answer-len 100 \
     --model Qwen/Qwen3-4B-Instruct-2507 --base-url "$VKONG_URL/v1" \
-    --api-key "$VLLM_API_KEY" --time 300 "$@"
+    --api-key "$LLM_API_KEY" --time 300 "$@"
 }
 bench --init-user-id 1000 --output no-header.csv                       # no header
 bench --init-user-id 2000 --output session.csv --request-with-user-id  # with X-Vkong-Session
@@ -122,7 +151,12 @@ bench --init-user-id 2000 --output session.csv --request-with-user-id  # with X-
 Use a different `--init-user-id` for each run so a run never reuses the cache
 of the one before.
 
-## Results
+Each row of the output CSV has the time to first token and, in
+`cached_tokens`, the prompt tokens the engine read from its cache. The hit rate
+of a run is the sum of `cached_tokens` divided by the sum of `prompt_tokens`,
+so you get it without Grafana.
+
+## Results with vLLM
 
 Two RTX 4090 machines, one in **Vietnam** and one in the **United States**,
 called from a laptop in Vietnam. 15 users, 10 messages each, about 11,000
@@ -160,6 +194,26 @@ read from the cache, orange is prompt computed again:
 
 ![Grafana, both runs: hit rate per machine, routing split, prompt from cache vs computed](images/grafana-both-runs.png)
 
+## Results with SGLang
+
+The same benchmark and settings against `sglang/`: two RTX 4090 machines (the
+first in South Africa), called from a laptop in Vietnam. 15 users, 10 messages
+each, about 11,400 tokens per prompt, 5 minutes and 164 requests per run. Each
+machine holds 86,929 tokens of KV cache (`max_total_num_tokens` in the SGLang
+log).
+
+| | No header | `X-Vkong-Session` |
+|---|---|---|
+| Prefix cache hit rate | 17.8% | **48.8%** |
+| Time to first token, follow-up messages, p50 | 1.42 s | **0.89 s** |
+| Time to first token, follow-up messages, p90 | 2.20 s | 2.09 s |
+| Time to first token, all messages, p50 | 1.47 s | **1.27 s** |
+| Time to first token, first message, mean | 2.22 s | 1.91 s |
+
+The hit rate is the share of prompt tokens SGLang reported as cached
+(`cached_tokens` in each response, with `--enable-cache-report`), over every
+request of the run.
+
 ## When to use it
 
 - **Use it** for multi-turn chat, agents that resend long histories, and
@@ -186,14 +240,14 @@ client.chat.completions.create(
 
 ## What is public
 
-The App URL is public. vLLM refuses `/v1/*` requests without `VLLM_API_KEY`.
-`/health` and `/metrics` (counts and latencies, never prompts) answer without
-it.
+The App URL is public. The engine refuses `/v1/*` requests without
+`LLM_API_KEY`. `/health` and `/metrics` (counts and latencies, never prompts)
+answer without it.
 
 ## Stop
 
 ```bash
-vkong app stop vllm-stack
+vkong app stop session-routing-vllm     # or session-routing-sglang
 ```
 
 This releases both machines and stops billing. Metrics already sent stay in
@@ -201,12 +255,12 @@ Grafana Cloud.
 
 ## Customize
 
-- Model and vLLM flags: `serve.sh`.
-- Number of machines, GPU and price limit: `vkong.yaml`.
+- Model and engine flags: `<engine>/serve.sh`.
+- Number of machines, GPU and price limit: `<engine>/vkong.yaml`.
 - Another Prometheus instead of Grafana Cloud: point the three `METRICS_*` keys
   of the `grafana` secret at its remote-write endpoint.
 
 ## Credits
 
 - `bench/`: [vLLM production-stack](https://github.com/vllm-project/production-stack), Apache-2.0.
-- `dashboards/vllm.json`: [vLLM](https://github.com/vllm-project/vllm), Apache-2.0, changed as described in `dashboards/NOTICE`.
+- `vllm/dashboards/vllm.json`: [vLLM](https://github.com/vllm-project/vllm), Apache-2.0, changed as described in `vllm/dashboards/NOTICE`.

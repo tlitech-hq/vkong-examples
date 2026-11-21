@@ -5,7 +5,7 @@
 set -euo pipefail
 
 MODEL="${MODEL:-Qwen/Qwen3-4B-Instruct-2507}"
-: "${VLLM_API_KEY:?add VLLM_API_KEY to the vllm-stack secret (README step 2)}"
+: "${LLM_API_KEY:?add LLM_API_KEY to the llm-session-routing secret (README step 2)}"
 
 export HF_HOME="${HF_HOME:-$PWD/.hf_cache}"
 mkdir -p "$HF_HOME"
@@ -20,7 +20,7 @@ fi
 
 exec vllm serve "$MODEL" \
   --host 0.0.0.0 --port "$PORT" \
-  --api-key "$VLLM_API_KEY" \
+  --api-key "$LLM_API_KEY" \
   --served-model-name "$MODEL" \
   --max-model-len 16384 \
   --gpu-memory-utilization 0.90 \

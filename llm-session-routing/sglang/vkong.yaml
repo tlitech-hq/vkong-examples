@@ -1,12 +1,12 @@
-# App: two vLLM machines behind one VKong URL.
+# App: two SGLang machines behind one VKong URL.
 type: service
-app: vllm-stack
+app: session-routing-sglang
 app_port: 8000
 min_instances: 2
 max_instances: 2
 health:
   path: /health
-# The first start downloads the model (about 8 GB) before vLLM answers.
+# The first start downloads the model (about 8 GB) before SGLang answers.
 startup_timeout: 30m
 
 # Compute
@@ -20,12 +20,12 @@ disk_gb: 60
 max_price: 1.0
 verified_only: true
 
-# vllm-stack: VLLM_API_KEY. grafana: METRICS_WRITE_URL, METRICS_USER and
+# llm-session-routing: LLM_API_KEY. grafana: METRICS_WRITE_URL, METRICS_USER and
 # METRICS_PASSWORD for Grafana Cloud (README steps 1 and 2).
 secrets:
-  - vllm-stack
+  - llm-session-routing
   - grafana
 
 # Runtime
-image: vllm/vllm-openai:v0.32.0
+image: lmsysorg/sglang:v0.5.23
 start: exec bash serve.sh

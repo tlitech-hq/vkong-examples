@@ -18,7 +18,7 @@ VERSION = "3.15.1"
 SHA256 = "6a726885328ad9efebbf36e876ce2fb6225468a71fd1e7ce3ba666d5f4d97a84"
 NAME = f"prometheus-{VERSION}.linux-amd64"
 URL = f"https://github.com/prometheus/prometheus/releases/download/v{VERSION}/{NAME}.tar.gz"
-HOME = "/opt/vllm-stack-agent"
+HOME = "/opt/vkong-metrics-agent"
 
 
 def fetch():
@@ -50,7 +50,7 @@ def main():
         f.write(f"""global:
   scrape_interval: 15s
   external_labels:
-    app: vllm-stack
+    app: session-routing-vllm
     replica: "{replica}"
 scrape_configs:
   - job_name: vllm

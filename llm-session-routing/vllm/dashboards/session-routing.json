@@ -1,7 +1,7 @@
 {
-  "uid": "vllm-stack",
-  "title": "vLLM stack on VKong",
-  "description": "Prefix cache reuse, routing split and latency for every engine of the vllm-stack App.",
+  "uid": "session-routing-vllm",
+  "title": "Session routing on VKong (vLLM)",
+  "description": "Prefix cache reuse, routing split and latency for every engine of the session-routing-vllm App.",
   "tags": [
     "vllm",
     "vkong"
@@ -52,7 +52,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum(increase(vllm:prefix_cache_hits_total{app=\"vllm-stack\"}[$__range])) / sum(increase(vllm:prefix_cache_queries_total{app=\"vllm-stack\"}[$__range]))",
+          "expr": "sum(increase(vllm:prefix_cache_hits_total{app=\"session-routing-vllm\"}[$__range])) / sum(increase(vllm:prefix_cache_queries_total{app=\"session-routing-vllm\"}[$__range]))",
           "instant": true,
           "datasource": {
             "type": "prometheus",
@@ -117,7 +117,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "count(up{job=\"vllm\",app=\"vllm-stack\"} == 1) or vector(0)",
+          "expr": "count(up{job=\"vllm\",app=\"session-routing-vllm\"} == 1) or vector(0)",
           "instant": true,
           "datasource": {
             "type": "prometheus",
@@ -175,7 +175,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum(rate(vllm:request_success_total{app=\"vllm-stack\"}[1m])) or vector(0)",
+          "expr": "sum(rate(vllm:request_success_total{app=\"session-routing-vllm\"}[1m])) or vector(0)",
           "datasource": {
             "type": "prometheus",
             "uid": "${datasource}"
@@ -228,7 +228,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "histogram_quantile(0.5, sum by (le) (rate(vllm:time_to_first_token_seconds_bucket{app=\"vllm-stack\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.5, sum by (le) (rate(vllm:time_to_first_token_seconds_bucket{app=\"session-routing-vllm\"}[$__rate_interval])))",
           "datasource": {
             "type": "prometheus",
             "uid": "${datasource}"
@@ -282,7 +282,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum by (replica) (rate(vllm:prefix_cache_hits_total{app=\"vllm-stack\"}[$__rate_interval])) / sum by (replica) (rate(vllm:prefix_cache_queries_total{app=\"vllm-stack\"}[$__rate_interval]))",
+          "expr": "sum by (replica) (rate(vllm:prefix_cache_hits_total{app=\"session-routing-vllm\"}[$__rate_interval])) / sum by (replica) (rate(vllm:prefix_cache_queries_total{app=\"session-routing-vllm\"}[$__rate_interval]))",
           "legendFormat": "{{replica}}",
           "datasource": {
             "type": "prometheus",
@@ -291,7 +291,7 @@
         },
         {
           "refId": "B",
-          "expr": "sum(rate(vllm:prefix_cache_hits_total{app=\"vllm-stack\"}[$__rate_interval])) / sum(rate(vllm:prefix_cache_queries_total{app=\"vllm-stack\"}[$__rate_interval]))",
+          "expr": "sum(rate(vllm:prefix_cache_hits_total{app=\"session-routing-vllm\"}[$__rate_interval])) / sum(rate(vllm:prefix_cache_queries_total{app=\"session-routing-vllm\"}[$__rate_interval]))",
           "legendFormat": "all engines",
           "datasource": {
             "type": "prometheus",
@@ -371,7 +371,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum by (replica) (rate(vllm:request_success_total{app=\"vllm-stack\"}[$__rate_interval]))",
+          "expr": "sum by (replica) (rate(vllm:request_success_total{app=\"session-routing-vllm\"}[$__rate_interval]))",
           "legendFormat": "{{replica}}",
           "datasource": {
             "type": "prometheus",
@@ -424,7 +424,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum(rate(vllm:prefix_cache_hits_total{app=\"vllm-stack\"}[$__rate_interval]))",
+          "expr": "sum(rate(vllm:prefix_cache_hits_total{app=\"session-routing-vllm\"}[$__rate_interval]))",
           "legendFormat": "from cache",
           "datasource": {
             "type": "prometheus",
@@ -433,7 +433,7 @@
         },
         {
           "refId": "B",
-          "expr": "sum(rate(vllm:prefix_cache_queries_total{app=\"vllm-stack\"}[$__rate_interval])) - sum(rate(vllm:prefix_cache_hits_total{app=\"vllm-stack\"}[$__rate_interval]))",
+          "expr": "sum(rate(vllm:prefix_cache_queries_total{app=\"session-routing-vllm\"}[$__rate_interval])) - sum(rate(vllm:prefix_cache_hits_total{app=\"session-routing-vllm\"}[$__rate_interval]))",
           "legendFormat": "computed",
           "datasource": {
             "type": "prometheus",
@@ -516,7 +516,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "max by (replica) (vllm:kv_cache_usage_perc{app=\"vllm-stack\"})",
+          "expr": "max by (replica) (vllm:kv_cache_usage_perc{app=\"session-routing-vllm\"})",
           "legendFormat": "{{replica}}",
           "datasource": {
             "type": "prometheus",
@@ -565,7 +565,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum by (replica) (vllm:num_requests_running{app=\"vllm-stack\"})",
+          "expr": "sum by (replica) (vllm:num_requests_running{app=\"session-routing-vllm\"})",
           "legendFormat": "{{replica}} running",
           "datasource": {
             "type": "prometheus",
@@ -574,7 +574,7 @@
         },
         {
           "refId": "B",
-          "expr": "sum by (replica) (vllm:num_requests_waiting{app=\"vllm-stack\"})",
+          "expr": "sum by (replica) (vllm:num_requests_waiting{app=\"session-routing-vllm\"})",
           "legendFormat": "{{replica}} waiting",
           "datasource": {
             "type": "prometheus",
@@ -623,7 +623,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "histogram_quantile(0.5, sum by (le, replica) (rate(vllm:time_to_first_token_seconds_bucket{app=\"vllm-stack\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.5, sum by (le, replica) (rate(vllm:time_to_first_token_seconds_bucket{app=\"session-routing-vllm\"}[$__rate_interval])))",
           "legendFormat": "{{replica}} p50",
           "datasource": {
             "type": "prometheus",
@@ -632,7 +632,7 @@
         },
         {
           "refId": "B",
-          "expr": "histogram_quantile(0.95, sum by (le, replica) (rate(vllm:time_to_first_token_seconds_bucket{app=\"vllm-stack\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.95, sum by (le, replica) (rate(vllm:time_to_first_token_seconds_bucket{app=\"session-routing-vllm\"}[$__rate_interval])))",
           "legendFormat": "{{replica}} p95",
           "datasource": {
             "type": "prometheus",
@@ -680,7 +680,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum by (replica) (rate(vllm:generation_tokens_total{app=\"vllm-stack\"}[$__rate_interval]))",
+          "expr": "sum by (replica) (rate(vllm:generation_tokens_total{app=\"session-routing-vllm\"}[$__rate_interval]))",
           "legendFormat": "{{replica}}",
           "datasource": {
             "type": "prometheus",
@@ -728,7 +728,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "histogram_quantile(0.5, sum by (le, replica) (rate(vllm:e2e_request_latency_seconds_bucket{app=\"vllm-stack\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.5, sum by (le, replica) (rate(vllm:e2e_request_latency_seconds_bucket{app=\"session-routing-vllm\"}[$__rate_interval])))",
           "legendFormat": "{{replica}} p50",
           "datasource": {
             "type": "prometheus",
@@ -737,7 +737,7 @@
         },
         {
           "refId": "B",
-          "expr": "histogram_quantile(0.95, sum by (le, replica) (rate(vllm:e2e_request_latency_seconds_bucket{app=\"vllm-stack\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.95, sum by (le, replica) (rate(vllm:e2e_request_latency_seconds_bucket{app=\"session-routing-vllm\"}[$__rate_interval])))",
           "legendFormat": "{{replica}} p95",
           "datasource": {
             "type": "prometheus",

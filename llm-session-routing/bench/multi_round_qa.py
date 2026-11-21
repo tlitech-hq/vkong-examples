@@ -113,6 +113,7 @@ class Response:
     ttft: float
     generation_time: float
     prompt_tokens: int
+    cached_tokens: int
     generation_tokens: int
     launch_time: float
     finish_time: float
@@ -132,6 +133,7 @@ class RequestExecutor:
         words = ""
         tokens_out = 0
         tokens_prefill = 0
+        tokens_cached = 0
 
         response = await self.client.chat.completions.create(
             messages=messages,
@@ -148,6 +150,11 @@ class RequestExecutor:
             if hasattr(tok, "usage") and tok.usage is not None:
                 tokens_out = tok.usage.completion_tokens
                 tokens_prefill = tok.usage.prompt_tokens
+                # Prompt tokens served from the engine's prefix cache
+                # (vLLM --enable-prompt-tokens-details, SGLang
+                # --enable-cache-report).
+                details = getattr(tok.usage, "prompt_tokens_details", None)
+                tokens_cached = getattr(details, "cached_tokens", None) or 0
 
             # 2. Skip chunks without content (like the final usage chunk)
             if not tok.choices or len(tok.choices) == 0:
@@ -175,6 +182,7 @@ class RequestExecutor:
             ttft=actual_first_token - start_time,
             generation_time=time.time() - actual_first_token,
             prompt_tokens=tokens_prefill,
+            cached_tokens=tokens_cached,
             generation_tokens=tokens_out,
             launch_time=start_time,
             finish_time=time.time(),
@@ -217,6 +225,7 @@ class UserSession:
         self.last_unfinished_log = 0
 
         self.prompt_lengths = []
+        self.cached_lengths = []
         self.generation_lengths = []
         self.ttfts = []
         self.generation_times = []
@@ -227,6 +236,7 @@ class UserSession:
 
     def _update_result(self, response: Response):
         self.prompt_lengths.append(response.prompt_tokens)
+        self.cached_lengths.append(response.cached_tokens)
         self.generation_lengths.append(response.generation_tokens)
         self.ttfts.append(response.ttft)
         self.generation_times.append(response.generation_time)
@@ -354,6 +364,7 @@ class UserSession:
     def summary(self) -> pd.DataFrame:
         df = pd.DataFrame()
         df["prompt_tokens"] = self.prompt_lengths
+        df["cached_tokens"] = self.cached_lengths
         df["generation_tokens"] = self.generation_lengths
         df["ttft"] = self.ttfts
         df["generation_time"] = self.generation_times
